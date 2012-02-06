@@ -32,9 +32,16 @@ class TestServerThread(threading.Thread):
         self._error = None
         super(TestServerThread, self).__init__()
 
+    def get_handler(self):
+        from django.conf import settings
+        if 'django.contrib.staticfiles' in settings.INSTALLED_APPS:
+            from django.contrib.staticfiles.handlers import StaticFilesHandler
+            return StaticFilesHandler(WSGIHandler())
+        return basehttp.AdminMediaHandler(WSGIHandler())
+
     def run(self):
         try:
-            handler = basehttp.AdminMediaHandler(WSGIHandler())
+            handler = self.get_handler()
             def test_app(environ, start_response):
                 if environ['REQUEST_METHOD'] == 'HEAD':
                     start_response('200 OK', [])
