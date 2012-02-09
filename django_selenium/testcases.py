@@ -144,7 +144,7 @@ class SeleniumTestCase(TransactionTestCase):
 
     def setUp(self):
         import socket
-        socket.setdefaulttimeout(settings.SELENIUM_TIMEOUT)
+        socket.setdefaulttimeout(settings.SELENIUM_TIMEOUT+10)
         self.driver = MyDriver()
         self.driver.implicitly_wait(settings.SELENIUM_TIMEOUT)
 
